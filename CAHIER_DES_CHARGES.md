@@ -14,7 +14,7 @@ Révision du 3 novembre 2026 : le projet « Jauge » (visualiseur de données au
 - **Lecture du PV** : IA de vision. **Gemini** (Google AI Studio, palier gratuit, sans carte bancaire) lit le PDF ou la photo et rend les défauts en JSON. OpenAI n'a pas d'API gratuite, d'où Gemini. Si le palier gratuit ne suffit pas, on passe sur une clé payante (même code, autre clé).
 - **Clé API** : dans les variables d'environnement du serveur, jamais dans le front. **Rappel pour Claude : me demander de créer et poser la clé au moment des tests réels.** D'ici là, on travaille avec un contrôle technique d'exemple et des réponses de test (section 4).
 - **Voitures 3D** : rendu **réaliste**. Une silhouette générée en code avec Three.js reste stylisée (low-poly), elle ne peut pas être « super réaliste ». On utilise donc des **modèles 3D gratuits** (glTF, licence CC0 ou CC-BY créditée), éclairés par un environnement HDRI (Poly Haven, CC0).
-- **Carrosseries** : citadine/berline, break, SUV, 4x4, camionnette. L'IA lit la carrosserie sur le PV et choisit le modèle ; un sélecteur permet d'en changer.
+- **Une seule voiture** (révision du 3 novembre) : le même modèle pour tous les PV, `public/models/voiture.glb`, fourni par moi. Plus de choix de carrosserie ni de sélecteur. Remplace les cinq carrosseries et les modèles Kenney (CC0) utilisés un temps.
 - **Look** : atelier / fiche technique. Papier millimétré clair, traits de plan, tampons « FAVORABLE » / « CONTRE-VISITE », étiquettes façon fiche d'atelier. La voiture réaliste trône au centre, comme posée sur la table à dessin.
 - **Pas de jeu du jour** sur ce projet.
 - **Données** : rien n'est stocké. Le fichier est analysé en mémoire puis jeté. Le dernier résultat reste dans le navigateur (localStorage) pour le revoir. Pas de compte, pas de base de données. Le site prévient que le palier gratuit de Gemini peut servir à Google pour améliorer ses modèles.
@@ -30,7 +30,7 @@ On avance étape par étape, chacune validée avant la suivante.
 1. **Socle** : Vite (front) + Express (API) dans un seul service. Page d'accueil = page d'import, au look atelier. Une phrase d'explication, la zone de dépôt, un bouton « Essayer avec un exemple », une courte FAQ en dessous.
 2. **Import** : glisser-déposer ou bouton, et sur téléphone « Prendre en photo ». PDF, JPEG, PNG, HEIC, 10 Mo au plus.
 3. **Analyse** : `POST /api/analyse` envoie le fichier à Gemini avec un schéma de sortie imposé. Écran d'attente animé (le PV qui se fait « scanner »). Sans clé : réponse d'exemple, signalée comme telle.
-4. **Voiture 3D** : modèle de la bonne carrosserie, rotation et déplacement à la souris ou au doigt, zoom à la molette ou au pincement. Les défauts apparaissent en voyants sur les zones concernées.
+4. **Voiture 3D** : la voiture du site, rotation et déplacement à la souris ou au doigt, zoom à la molette ou au pincement. Les défauts apparaissent en voyants sur les zones concernées.
 5. **Liste des défauts** à côté (en dessous sur mobile) : intitulé en clair, code, gravité, zone. Cliquer un défaut fait tourner la caméra vers sa zone ; cliquer un voyant ouvre le défaut dans la liste.
 6. **Verdict** : tampon « FAVORABLE », « DÉFAVORABLE — contre-visite » ou « CRITIQUE — contre-visite sous 24 h », avec le compte des défauts par gravité.
 7. En ligne sur Coolify, avec un README à jour et un aperçu de lien (Open Graph).
@@ -40,11 +40,6 @@ On avance étape par étape, chacune validée avant la suivante.
 - Contrôles techniques **français** des véhicules légers (catégories M1 / N1).
 - Un PV à la fois, pas d'historique ni de comparaison.
 - Pas de devis ni d'estimation de prix de réparation.
-
-### À trancher pendant l'étape 4
-
-- **Teinte des voitures** : carrosserie d'origine des modèles, ou toutes passées en blanc satiné (« maquette d'atelier ») pour que les cinq modèles aient le même rendu et que les voyants ressortent. Je proposerai les deux en capture.
-- **Sources des modèles** : je proposerai une liste (lien, licence, poids) avant tout téléchargement, à valider.
 
 ## 3. Cahier des charges fonctionnel
 
@@ -121,8 +116,7 @@ Le MVP fonctionne, les critères de la section 5 sont cochés, le site est en li
 ## 8. À me demander pendant le projet
 
 1. **La clé Gemini**, au moment des tests réels (section 0).
-2. **Les modèles 3D** : liste des sources et licences avant téléchargement (section 2).
-3. **La teinte des voitures**, sur captures (section 2).
+2. **La source et la licence de la voiture** (`voiture.glb`), avant la mise en ligne.
 
 ## 9. Aperçu du lien (à faire sans me le redemander)
 

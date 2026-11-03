@@ -1,0 +1,342 @@
+:root {
+  --papier: #f5f0e3;
+  --encre: #1c2b3a;
+  --encre-douce: #51606e;
+  --quadrillage: rgb(42 90 140 / 0.13);
+  --quadrillage-fin: rgb(42 90 140 / 0.06);
+  --mineur: #d9730d;
+  --majeur: #b8322a;
+  --ok: #2e6b3b;
+  --bordure: #1c2b3a;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--papier);
+  background-image:
+    linear-gradient(var(--quadrillage) 1px, transparent 1px),
+    linear-gradient(90deg, var(--quadrillage) 1px, transparent 1px),
+    linear-gradient(var(--quadrillage-fin) 1px, transparent 1px),
+    linear-gradient(90deg, var(--quadrillage-fin) 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+  color: var(--encre);
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  line-height: 1.55;
+}
+
+main,
+.masthead,
+.pied {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.masthead {
+  padding-top: 48px;
+}
+
+.fiche {
+  display: inline-block;
+  margin: 0 0 20px;
+  padding: 4px 10px;
+  border: 2px solid var(--majeur);
+  color: var(--majeur);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transform: rotate(-2deg);
+}
+
+h1 {
+  margin: 0;
+  font-family: "Zilla Slab", Georgia, serif;
+  font-size: clamp(3.2rem, 14vw, 5.5rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.lede {
+  max-width: 34ch;
+  margin: 16px 0 0;
+  font-size: 1.15rem;
+  color: var(--encre-douce);
+}
+
+main {
+  padding-top: 40px;
+  padding-bottom: 32px;
+}
+
+h2 {
+  margin: 0 0 16px;
+  font-family: "Zilla Slab", Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.zone-depot {
+  display: grid;
+  place-items: center;
+  gap: 6px;
+  min-height: 220px;
+  padding: 24px 16px;
+  border: 2px dashed var(--bordure);
+  background: color-mix(in srgb, var(--papier) 85%, white);
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.zone-depot.survol {
+  border-style: solid;
+  border-color: var(--mineur);
+  background: color-mix(in srgb, var(--mineur) 10%, var(--papier));
+}
+
+.zone-depot.occupee {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.message {
+  min-height: 1.5em;
+  margin: 12px 0 0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.9rem;
+}
+
+.message[data-ton="erreur"] {
+  color: var(--majeur);
+}
+
+.message[data-ton="ok"] {
+  color: var(--ok);
+}
+
+/* Une ligne de scan parcourt le PV pendant la lecture. */
+.zone-depot.occupee {
+  position: relative;
+  overflow: hidden;
+}
+
+.zone-depot.occupee::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--mineur);
+  animation: scan 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes scan {
+  from { top: 0; }
+  to { top: calc(100% - 3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zone-depot.occupee::after {
+    animation: none;
+    top: 50%;
+  }
+}
+
+.resultat {
+  margin-top: 48px;
+}
+
+.bandeau {
+  margin: 0 0 16px;
+  padding: 8px 12px;
+  border: 2px solid var(--mineur);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.85rem;
+}
+
+.defauts {
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.defaut {
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  border-left: 6px solid;
+  background: color-mix(in srgb, var(--papier) 88%, white);
+}
+
+.vue3d {
+  width: 100%;
+  height: 360px;
+  margin: 16px 0;
+  border: 2px solid var(--bordure);
+  background: color-mix(in srgb, var(--papier) 88%, white);
+  cursor: grab;
+}
+
+.vue3d canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Tampon d'atelier : il porte le verdict, comme sur une fiche de contrôle. */
+.tampon {
+  display: inline-block;
+  margin: 8px 0 4px;
+  padding: 8px 16px;
+  border: 3px double;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  transform: rotate(-1.5deg);
+}
+
+.tampon[data-niveau="favorable"] {
+  color: var(--ok);
+  border-color: var(--ok);
+}
+
+.tampon[data-niveau="defavorable"],
+.tampon[data-niveau="critique"] {
+  color: var(--majeur);
+  border-color: var(--majeur);
+}
+
+.compte {
+  margin: 0 0 16px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.85rem;
+  color: var(--encre-douce);
+}
+
+.defaut:focus-visible {
+  outline: 3px solid var(--mineur);
+  outline-offset: 2px;
+}
+
+.defaut.actif {
+  background: color-mix(in srgb, var(--mineur) 14%, var(--papier));
+}
+
+.defaut.mineure {
+  border-color: var(--mineur);
+}
+
+.defaut.majeure,
+.defaut.critique {
+  border-color: var(--majeur);
+}
+
+/* L'appareil photo n'a de sens que sur un écran tactile. */
+.bouton.photo {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .bouton.photo {
+    display: inline-block;
+  }
+}
+
+.zone-titre {
+  margin: 0;
+  font-family: "Zilla Slab", Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.zone-detail {
+  margin: 0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.85rem;
+  color: var(--encre-douce);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.bouton {
+  min-height: 48px;
+  padding: 0 20px;
+  border: 2px solid var(--bordure);
+  background: transparent;
+  color: var(--encre);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.bouton.principal {
+  background: var(--encre);
+  color: var(--papier);
+}
+
+.bouton:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 3px 3px 0 var(--bordure);
+}
+
+.bouton:focus-visible,
+summary:focus-visible {
+  outline: 3px solid var(--mineur);
+  outline-offset: 3px;
+}
+
+.faq {
+  margin-top: 56px;
+}
+
+details {
+  border-top: 1px solid var(--bordure);
+  padding: 14px 0;
+}
+
+details:last-child {
+  border-bottom: 1px solid var(--bordure);
+}
+
+summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+details p {
+  margin: 4px 0 0;
+  color: var(--encre-douce);
+}
+
+.pied p {
+  margin: 0;
+  padding: 32px 0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8rem;
+  color: var(--encre-douce);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bouton {
+    transition: none;
+  }
+}

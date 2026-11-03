@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Voyant lit ton procès-verbal de contrôle technique et affiche tes défauts sur une voiture en 3D." />
+    <title>Voyant · Ton contrôle technique en 3D</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header class="masthead">
+      <p class="fiche">Fiche n° 21 · Atelier de contrôle technique</p>
+      <h1>Voyant</h1>
+      <p class="lede">
+        Dépose ton procès-verbal de contrôle technique. On le lit, et tes défauts
+        s'allument sur ta voiture, en 3D.
+      </p>
+    </header>
+
+    <main>
+      <section class="import" aria-labelledby="import-titre">
+        <h2 id="import-titre">Ton procès-verbal</h2>
+        <label for="fichier" class="zone-depot">
+          <span class="zone-titre">Glisse ton fichier ici</span>
+          <span class="zone-detail">PDF, JPEG, PNG ou HEIC · 10 Mo maximum</span>
+        </label>
+        <input
+          type="file"
+          id="fichier"
+          accept=".pdf,.jpg,.jpeg,.png,.heic,.heif,application/pdf,image/jpeg,image/png,image/heic,image/heif"
+          hidden
+        />
+        <input type="file" id="photo" accept="image/*" capture="environment" hidden />
+        <div class="actions">
+          <button type="button" class="bouton principal" id="choisir">Choisir un fichier</button>
+          <button type="button" class="bouton photo" id="prendre-photo">Prendre en photo</button>
+          <button type="button" class="bouton" id="exemple">Essayer avec un exemple</button>
+        </div>
+        <p class="message" id="message" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="resultat" id="resultat" aria-labelledby="resultat-titre" hidden>
+        <p class="bandeau" hidden>Exemple : aucune clé Gemini n'est configurée, ce n'est pas ton PV.</p>
+        <h2 id="resultat-titre">Défauts relevés</h2>
+        <p class="tampon" id="tampon" data-niveau="favorable"></p>
+        <p class="compte" id="compte"></p>
+        <div class="vue3d" id="vue3d" aria-hidden="true"></div>
+        <ul class="defauts" id="defauts"></ul>
+        <p id="vide" hidden>Aucun défaut retenu.</p>
+      </section>
+
+      <section class="faq" aria-labelledby="faq-titre">
+        <h2 id="faq-titre">Questions fréquentes</h2>
+        <details>
+          <summary>Mon contrôle technique est-il conservé ?</summary>
+          <p>Non. Le fichier est lu, puis effacé. Rien n'est stocké, ni compte, ni base de données.</p>
+        </details>
+        <details>
+          <summary>Une photo suffit-elle ?</summary>
+          <p>Oui. Une photo bien à plat, nette et bien éclairée donne les meilleurs résultats.</p>
+        </details>
+        <details>
+          <summary>Est-ce un avis officiel ?</summary>
+          <p>Non. Voyant aide à comprendre ton PV. Il ne remplace ni le contrôleur, ni ton garagiste.</p>
+        </details>
+        <details>
+          <summary>Est-ce gratuit ?</summary>
+          <p>Oui, pour un usage personnel. Le nombre d'analyses est limité par heure.</p>
+        </details>
+      </section>
+    </main>
+
+    <footer class="pied">
+      <p>30 jours, 30 projets · projet 21</p>
+    </footer>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

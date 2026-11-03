@@ -1,0 +1,29 @@
+{
+  "carrosserie": "break",
+  "defauts": [
+    {
+      "code": "1.3.1.a",
+      "libelle": "Disque de frein usé, avant droit",
+      "gravite": "majeure",
+      "zone": "roue_avd"
+    },
+    {
+      "code": "4.1.2.b",
+      "libelle": "Feu de position arrière gauche défectueux",
+      "gravite": "mineure",
+      "zone": "optique_arg"
+    },
+    {
+      "code": "3.1.2",
+      "libelle": "Balai d'essuie-glace usé",
+      "gravite": "mineure",
+      "zone": "pare_brise"
+    },
+    {
+      "code": "5.2.3.a.1",
+      "libelle": "Amortisseur avant gauche fuyard",
+      "gravite": "critique",
+      "zone": "train_avant"
+    }
+  ]
+}
