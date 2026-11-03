@@ -4,7 +4,8 @@ FROM node:22-alpine
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci
+# npm saute parfois le binaire Alpine de lightningcss (dépendance optionnelle) : on vérifie, et on relance une fois.
+RUN (npm ci && node -e "require('lightningcss')") || (npm ci && node -e "require('lightningcss')")
 
 COPY . .
 RUN npm run build
