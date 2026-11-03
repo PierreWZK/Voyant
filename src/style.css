@@ -223,24 +223,6 @@ h2 {
   color: var(--encre-douce);
 }
 
-.choix {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.9rem;
-}
-
-.choix select {
-  min-height: 40px;
-  padding: 0 8px;
-  border: 2px solid var(--bordure);
-  background: var(--papier);
-  color: var(--encre);
-  font: inherit;
-}
-
 .defaut:focus-visible {
   outline: 3px solid var(--mineur);
   outline-offset: 2px;

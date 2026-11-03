@@ -4,17 +4,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { positionZone } from './zones3d.js';
 
 const COULEURS = { mineure: '#d9730d', majeure: '#b8322a', critique: '#b8322a' };
-// Kenney n'a ni break ni 4x4 : le break prend la citadine sportive, le 4x4 partage le SUV.
-const MODELES = { berline: 'sedan.glb', break: 'hatchback-sports.glb', suv: 'suv.glb', '4x4': 'suv.glb', camionnette: 'van.glb' };
+const MODELE = '/models/voiture.glb';
 const LONGUEUR = 4.4;
-
-const chargeur = new GLTFLoader();
-const cacheModeles = new Map();
-
-function charger(fichier) {
-  if (!cacheModeles.has(fichier)) cacheModeles.set(fichier, chargeur.loadAsync(`/models/${fichier}`));
-  return cacheModeles.get(fichier);
-}
 
 // Pose le modèle sur le sol, centré, longueur alignée sur x, à la taille du cahier des charges.
 function normaliser(modele) {
@@ -36,17 +27,24 @@ function normaliser(modele) {
   return { groupe, dimensions: boite.getSize(new THREE.Vector3()) };
 }
 
-// Halo lumineux, dessiné une fois puis partagé par tous les voyants.
+// Pastille dessinée une fois, teintée par la couleur de chaque voyant. L'anneau sombre
+// reste sombre une fois teinté : le voyant se lit même sur une carrosserie de la même couleur.
 function creerHalo() {
   const toile = document.createElement('canvas');
   toile.width = toile.height = 128;
   const ctx = toile.getContext('2d');
-  const degrade = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
-  degrade.addColorStop(0, 'rgba(255,255,255,1)');
-  degrade.addColorStop(0.35, 'rgba(255,255,255,0.8)');
-  degrade.addColorStop(1, 'rgba(255,255,255,0)');
-  ctx.fillStyle = degrade;
+  const halo = ctx.createRadialGradient(64, 64, 30, 64, 64, 64);
+  halo.addColorStop(0, 'rgba(255,255,255,0.7)');
+  halo.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = halo;
   ctx.fillRect(0, 0, 128, 128);
+  ctx.beginPath();
+  ctx.arc(64, 64, 28, 0, Math.PI * 2);
+  ctx.fillStyle = '#ffffff';
+  ctx.fill();
+  ctx.lineWidth = 8;
+  ctx.strokeStyle = '#111820';
+  ctx.stroke();
   return new THREE.CanvasTexture(toile);
 }
 
@@ -75,9 +73,7 @@ export function creerVoiture3D(conteneur, { surVoyant } = {}) {
   const voyants = new Map();
   let defauts = [];
   let dimensions = { longueur: LONGUEUR, hauteur: 1.5, largeur: 1.8 };
-  let modeleActuel = null;
   let cibleCamera = null;
-  let demande = 0;
 
   function ajusterTaille() {
     const { clientWidth: l, clientHeight: h } = conteneur;
@@ -112,7 +108,7 @@ export function creerVoiture3D(conteneur, { surVoyant } = {}) {
     defauts = nouveaux;
     defauts.forEach((d, index) => {
       const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: halo, color: COULEURS[d.gravite], depthTest: false, transparent: true }));
-      sprite.scale.set(0.34, 0.34, 1);
+      sprite.scale.set(0.5, 0.5, 1);
       sprite.renderOrder = 1;
       sprite.userData = { index, critique: d.gravite === 'critique' };
       voyants.set(index, sprite);
@@ -121,18 +117,13 @@ export function creerVoiture3D(conteneur, { surVoyant } = {}) {
     placerVoyants();
   }
 
-  // Charge le modèle de la carrosserie ; si un choix plus récent arrive entre-temps, il l'emporte.
-  async function changerCarrosserie(carrosserie) {
-    const numero = ++demande;
-    const gltf = await charger(MODELES[carrosserie] ?? MODELES.berline);
-    if (numero !== demande) return;
-    if (modeleActuel) scene.remove(modeleActuel);
-    const { groupe, dimensions: nouvelles } = normaliser(gltf.scene.clone(true));
+  // Une seule voiture pour tous les PV : chargée une fois, les voyants se recalent sur ses dimensions.
+  const chargement = new GLTFLoader().loadAsync(MODELE).then((gltf) => {
+    const { groupe, dimensions: nouvelles } = normaliser(gltf.scene);
     dimensions = { longueur: nouvelles.x, hauteur: nouvelles.y, largeur: nouvelles.z };
-    modeleActuel = groupe;
     scene.add(groupe);
     placerVoyants();
-  }
+  });
 
   // Tourne la caméra vers une zone, sans toucher au zoom.
   function viserZone(zone) {
@@ -143,7 +134,7 @@ export function creerVoiture3D(conteneur, { surVoyant } = {}) {
     for (const voyant of voyants.values()) {
       if (voyant.userData.critique) {
         const pouls = 1 + Math.sin(temps / 220) * 0.25;
-        voyant.scale.set(0.34 * pouls, 0.34 * pouls, 1);
+        voyant.scale.set(0.5 * pouls, 0.5 * pouls, 1);
       }
     }
     if (cibleCamera) {
@@ -155,5 +146,5 @@ export function creerVoiture3D(conteneur, { surVoyant } = {}) {
   });
 
   ajusterTaille();
-  return { afficherDefauts, changerCarrosserie, viserZone, redimensionner: ajusterTaille };
+  return { afficherDefauts, viserZone, redimensionner: ajusterTaille, chargement };
 }

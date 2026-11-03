@@ -10,7 +10,7 @@ Tu déposes ton procès-verbal de contrôle technique (PDF ou photo), une IA de 
 
 - Import du PV en PDF ou en photo (glisser-déposer, ou appareil photo sur téléphone).
 - Lecture par IA de vision (Gemini), défauts rendus en JSON et rattachés à une zone de la voiture.
-- Voiture 3D réaliste selon la carrosserie (citadine, break, SUV, 4x4, camionnette), détectée et modifiable.
+- Une voiture en 3D, la même pour tous les PV, avec les défauts posés sur ses zones.
 - Liste des défauts reliée aux voyants : un clic sur l'un fait tourner la caméra vers l'autre.
 - Verdict façon tampon d'atelier : favorable, contre-visite, critique.
 - Rien n'est stocké : le fichier est analysé puis jeté.

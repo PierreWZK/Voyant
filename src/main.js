@@ -50,13 +50,7 @@ async function envoyer(fichier) {
 }
 
 const voiture = creerVoiture3D(document.querySelector('#vue3d'), { surVoyant: (index) => activerDefaut(index) });
-const choixCarrosserie = document.querySelector('#choix-carrosserie');
-
-function choisirCarrosserie(carrosserie) {
-  choixCarrosserie.value = carrosserie;
-  voiture.changerCarrosserie(carrosserie).catch(() => afficher('Modèle 3D indisponible.', 'erreur'));
-}
-choixCarrosserie.addEventListener('change', () => choisirCarrosserie(choixCarrosserie.value));
+voiture.chargement.catch(() => afficher('Modèle 3D indisponible.', 'erreur'));
 
 // Un défaut est mis en avant dans la liste, et la caméra vise sa zone.
 function activerDefaut(index) {
@@ -94,7 +88,6 @@ function montrerResultat({ exemple, resultat }) {
     }),
   );
   voiture.afficherDefauts(resultat.defauts);
-  choisirCarrosserie(resultat.carrosserie);
   zoneResultat.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 

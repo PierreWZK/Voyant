@@ -3,12 +3,13 @@
 // Changer de modèle 3D ne demande que ce fichier-là, pas de toucher aux voyants.
 export const ANCRAGES = {
   moteur: [0.8, 0.5, 0],
-  train_avant: [0.75, 0.2, 0],
-  train_arriere: [-0.75, 0.2, 0],
-  roue_avg: [0.7, 0.15, -1],
-  roue_avd: [0.7, 0.15, 1],
-  roue_arg: [-0.7, 0.15, -1],
-  roue_ard: [-0.7, 0.15, 1],
+  // Essieux et centre des roues relevés sur public/models/voiture.glb.
+  train_avant: [0.64, 0.26, 0],
+  train_arriere: [-0.52, 0.26, 0],
+  roue_avg: [0.64, 0.26, -1],
+  roue_avd: [0.64, 0.26, 1],
+  roue_arg: [-0.52, 0.26, -1],
+  roue_ard: [-0.52, 0.26, 1],
   optique_avg: [1, 0.5, -0.6],
   optique_avd: [1, 0.5, 0.6],
   optique_arg: [-1, 0.5, -0.6],
