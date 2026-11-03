@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-03T01:55:54.706Z",
+        "reason": "user chose the Atelier / fiche technique look with papier millimétré clair (day-21 Q&A, 2026-11-03)"
+      },
+      {
+        "rule": "hero-eyebrow-chip",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-03T01:55:54.950Z",
+        "reason": "intentional Atelier stamp 'Fiche n° 21', part of the look the user chose (day-21 Q&A, 2026-11-03)"
+      }
+    ]
+  }
+}
